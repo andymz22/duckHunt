@@ -1,7 +1,7 @@
 import juegoConfig.*
 import wollok.game.*
 
-describe "test de juegoConfig" {
+describe "Test de juegoConfig" {
 	
 	//puntaje
 	test "la cantidad inicial de puntos = 0" {
