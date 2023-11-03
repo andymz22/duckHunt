@@ -12,7 +12,7 @@ object arma {
 	method image() = "./imagesTemp/crosshair1.png"
 	method esPato() = false
 	method esPatoDorado() = false
-	method agregarDosBalas() {balas = 5.min(balas + 2)}
+	method agregarDosBalas() {balas = 6.min(balas + 2)}
 	method sonidoDisparoSiHayBalas() {if (balas > 0) {new SonidoDisparos().ejecutarDisparo()}}
 	method terminarJuego() {if(balas == 0) {juego.finDelJuego()}}
 	method disparar() {
@@ -98,7 +98,10 @@ class PatosDorados inherits Patos {
 	override method image() = "./images/patoDorado1.png" 
 	override method matar(score) {
 		super(score + 20)
-		arma.agregarDosBalas() // ARREGLAR. Nunca llega al total de 5 balas, exceptuando al inicio.
+		arma.agregarDosBalas() 
+		// Una solucion al problema es utilizando un 6.min, ya que al suamrse 2 balas mas
+		//el min no detecta que 5 y 5 son iguales, entonces siempre se queda con el valor de 4
+		//entonces, el codigo quedaria {balas = 6.min(balas + 2)}
 		perro.avisoBalasExtra()	
 	}
 }
