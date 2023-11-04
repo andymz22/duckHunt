@@ -13,6 +13,16 @@ class SonidoDisparos {
 }
 
 
+class SonidoRecargas {
+	const empezarRecarga = game.sound("./sounds/reload.mp3")
+	
+	method ejecutarRecarga() {
+		empezarRecarga.volume(0.5)
+		empezarRecarga.play()
+	}
+}
+
+
 class Musica {
 	method musicaDeFondo(musica) {
 		musica.volume(0.5)

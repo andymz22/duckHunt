@@ -9,12 +9,12 @@ object arma {
 
 	method balas() = balas
 	method position() = position
-	method image() = "./imagesTemp/crosshair1.png"
+	method image() = "./images/crosshair1.png"
 	method esPato() = false
 	method esPatoDorado() = false
 	method agregarDosBalas() {balas = 6.min(balas + 2)}
 	method sonidoDisparoSiHayBalas() {if (balas > 0) {new SonidoDisparos().ejecutarDisparo()}}
-	method terminarJuego() {if(balas == 0) {juego.finDelJuego()}}
+	method terminarJuego() {if (balas == 0) {juego.finDelJuego()}}
 	method disparar() {
 		self.sonidoDisparoSiHayBalas()
 		if(balas > 0) {			
@@ -22,7 +22,11 @@ object arma {
 		}
 		balas = 0.max(balas - 1)
 		perro.avisoBalasTotales()
-		game.schedule(500, {self.terminarJuego()})
+		game.schedule(1000, {self.terminarJuego()})
+	}
+	method recargarYDisparar() {
+		new SonidoRecargas().ejecutarRecarga()
+		game.schedule(200, {self.disparar()})
 	}
 }
 
@@ -59,7 +63,7 @@ object perro {
 	
 	method esPato() = false
 	method esPatoDorado() = false
-	method image() = "./images/dog/clue.png"
+	method image() = "./images/clue.png"
 	method avisoBalasTotales() {game.say(self, "Te quedan " + arma.balas().toString() + " bala/s!")}
 	method avisoBalasExtra() {game.say(self, "Se sumaron 2 balas extra!")}
 	method matar(score) {}
@@ -99,9 +103,6 @@ class PatosDorados inherits Patos {
 	override method matar(score) {
 		super(score + 20)
 		arma.agregarDosBalas() 
-		// Una solucion al problema es utilizando un 6.min, ya que al suamrse 2 balas mas
-		//el min no detecta que 5 y 5 son iguales, entonces siempre se queda con el valor de 4
-		//entonces, el codigo quedaria {balas = 6.min(balas + 2)}
 		perro.avisoBalasExtra()	
 	}
 }

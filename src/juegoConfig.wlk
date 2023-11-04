@@ -1,6 +1,7 @@
 import personajes.*
 import sonidos.*
 import wollok.game.*
+import wollok.lang.*
 
 	
 object juego {
@@ -19,9 +20,9 @@ object juego {
 		self.spawnPatos()
     }
     method finDelJuego() {
+    	game.clear()
     	const instanciaSonidoFinal = new MusicaFinal()
 		instanciaSonidoFinal.musicaDeFondo(instanciaSonidoFinal.finalMusic())
-        self.eliminarVisualesJuego()
         game.addVisual(fondoFinal)
         game.addVisual(cuadroPuntos)
         game.addVisual(puntaje)
@@ -31,24 +32,21 @@ object juego {
 		game.clear()
 		const instanciaSonidoJuego = new MusicaDeJuego()
 		instanciaSonidoJuego.musicaDeFondo(instanciaSonidoJuego.musicGame())
-		self.configurarTeclas()
         self.agregarVisualesJuego()
 		self.spawnPatos()
+		self.configurarTeclas()
 		arma.balas(5)
 		puntaje.puntos(0)
 	}
-	method eliminarVisualesJuego() {
-		game.removeVisual(fondoJuego)
-		game.removeVisual(perro)
-		game.removeVisual(balas)
-		game.removeVisual(arma)
-		game.removeVisual(puntaje)
-		game.removeTickEvent("pato")
-		game.removeTickEvent("patoDorado")
-		game.removeVisual(cuadroPuntos)
-	}
 	method configurarTeclas() {
-		keyboard.space().onPressDo{arma.disparar()}
+    var recargaEnCurso = false
+    keyboard.space().onPressDo {
+        if (!recargaEnCurso) {
+            arma.recargarYDisparar()
+            recargaEnCurso = true
+            game.schedule(650, {recargaEnCurso = false })
+        	}
+    	}
 	}
 	method posicionAleatoria() {
         const posicionRandom =  game.at(0.randomUpTo(game.width()), 2.randomUpTo(game.height()))
@@ -69,8 +67,8 @@ object juego {
 		game.schedule([1000,1500,2000].anyOne(), {generacionPatoDorado.eliminarPatoSiEsta(generacionPatoDorado)})
 	}
  	method spawnPatos() {
-		game.onTick([3000, 5000].anyOne(), "pato",{self.agregarVisualPato()})
-		game.onTick([10000, 13500].anyOne(), "patoDorado",{self.agregarVisualPatoDorado()})
+		game.onTick([2000, 3000].anyOne(), "pato",{self.agregarVisualPato()})
+		game.onTick([8000, 10000].anyOne(), "patoDorado",{self.agregarVisualPatoDorado()})
 	}
 	method agregarVisualesJuego() {
 		game.addVisual(fondoJuego)
